@@ -7,7 +7,7 @@ public class Mole : MonoBehaviour
     public bool IsActivate
     {
         get => myState == State.NoShow ? false : true;
-        
+
     }
     public bool IsHitable
     {
@@ -48,10 +48,6 @@ public class Mole : MonoBehaviour
                 break;
             case State.Down:
                 Dist = myHeight - Dist;
-                if(!isHitted && myType == Type.Monster)
-                {
-                    CatchMoleMachine.Inst.playTime -= 3.0f;
-                }
                 break;
         }
     }
@@ -68,7 +64,7 @@ public class Mole : MonoBehaviour
                 break;
             case State.Show:
                 playtime += Time.deltaTime;
-                if(playtime > showTime)
+                if (playtime > showTime)
                 {
                     playtime = 0.0f;
                     ChangeState(State.Down);
@@ -106,7 +102,7 @@ public class Mole : MonoBehaviour
     }
     void Initialize()
     {
-        foreach(Transform tr in transform)
+        foreach (Transform tr in transform)
         {
             Destroy(tr.gameObject);
         }
@@ -117,13 +113,13 @@ public class Mole : MonoBehaviour
     }
     public void OnActivate(float height, Type type)
     {
-        if(myType != type)
+        if (myType != type)
         {
             myType = type;
             Initialize();
         }
 
-        switch(myType)
+        switch (myType)
         {
             case Type.Monster:
                 showTime = 0.1f;
@@ -139,9 +135,14 @@ public class Mole : MonoBehaviour
 
     public void OnHit()
     {
-        CatchMoleMachine.Inst.Score += 10;
-        CatchMoleMachine.Inst.playTime += 3.0f;
         isHitted = true;
         ChangeState(State.Down);
+        if (myType == Type.Monster)
+        {
+            CatchMoleMachine.Inst.playTime -= 3.0f;
+            return;
+        }
+        CatchMoleMachine.Inst.Score += 10;
+        CatchMoleMachine.Inst.playTime += 3.0f;
     }
 }

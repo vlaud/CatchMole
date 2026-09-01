@@ -91,6 +91,15 @@ public class CatchMoleMachine : MonoBehaviour
         }
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+    }
+
     public void OnRetry()
     {
         ChangeState(State.Start);
@@ -98,7 +107,7 @@ public class CatchMoleMachine : MonoBehaviour
 
     public void OnClose()
     {
-        Application.Quit();
+        ExitGame();
     }
     void StateProcess()
     {
@@ -165,7 +174,7 @@ public class CatchMoleMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape)) ExitGame();
         StateProcess();
     }
 
